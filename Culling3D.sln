@@ -1,9 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Windows Desktop
+# Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Culling3D", "Culling3D\Culling3D.vcxproj", "{A89EF842-F040-49FB-AAB4-95180C04D0F5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{5CEF2F45-E0C8-4D46-B7E8-BDDD08ECF0EB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A89EF842-F040-49FB-AAB4-95180C04D0F5} = {A89EF842-F040-49FB-AAB4-95180C04D0F5}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{A89EF842-F040-49FB-AAB4-95180C04D0F5}.Debug|Win32.Build.0 = Debug|Win32
 		{A89EF842-F040-49FB-AAB4-95180C04D0F5}.Release|Win32.ActiveCfg = Release|Win32
 		{A89EF842-F040-49FB-AAB4-95180C04D0F5}.Release|Win32.Build.0 = Release|Win32
+		{5CEF2F45-E0C8-4D46-B7E8-BDDD08ECF0EB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5CEF2F45-E0C8-4D46-B7E8-BDDD08ECF0EB}.Debug|Win32.Build.0 = Debug|Win32
+		{5CEF2F45-E0C8-4D46-B7E8-BDDD08ECF0EB}.Release|Win32.ActiveCfg = Release|Win32
+		{5CEF2F45-E0C8-4D46-B7E8-BDDD08ECF0EB}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

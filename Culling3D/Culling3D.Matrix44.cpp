@@ -88,6 +88,195 @@ namespace Culling3D
 		return *this;
 	}
 
+	Matrix44& Matrix44::SetLookAtRH(const Vector3DF& eye, const Vector3DF& at, const Vector3DF& up)
+	{
+		// F=正面、R=右方向、U=上方向
+		Vector3DF F = (eye - at).GetNormal();
+		Vector3DF R = Vector3DF::Cross(up, F).GetNormal();
+		Vector3DF U = Vector3DF::Cross(F, R).GetNormal();
+
+		Values[0][0] = R.X;
+		Values[0][1] = R.Y;
+		Values[0][2] = R.Z;
+		Values[0][3] = 0.0f;
+
+		Values[1][0] = U.X;
+		Values[1][1] = U.Y;
+		Values[1][2] = U.Z;
+		Values[1][3] = 0.0f;
+
+		Values[2][0] = F.X;
+		Values[2][1] = F.Y;
+		Values[2][2] = F.Z;
+		Values[2][3] = 0.0f;
+
+		Values[0][3] = -Vector3DF::Dot(R, eye);
+		Values[1][3] = -Vector3DF::Dot(U, eye);
+		Values[2][3] = -Vector3DF::Dot(F, eye);
+		Values[3][3] = 1.0f;
+		return *this;
+	}
+
+	Matrix44& Matrix44::SetLookAtLH(const Vector3DF& eye, const Vector3DF& at, const Vector3DF& up)
+	{
+		// F=正面、R=右方向、U=上方向
+		Vector3DF F = (at - eye).GetNormal();
+		Vector3DF R = Vector3DF::Cross(up, F).GetNormal();
+		Vector3DF U = Vector3DF::Cross(F, R).GetNormal();
+
+		Values[0][0] = R.X;
+		Values[0][1] = R.Y;
+		Values[0][2] = R.Z;
+		Values[0][3] = 0.0f;
+
+		Values[1][0] = U.X;
+		Values[1][1] = U.Y;
+		Values[1][2] = U.Z;
+		Values[1][3] = 0.0f;
+
+		Values[2][0] = F.X;
+		Values[2][1] = F.Y;
+		Values[2][2] = F.Z;
+		Values[2][3] = 0.0f;
+
+		Values[0][3] = -Vector3DF::Dot(R, eye);
+		Values[1][3] = -Vector3DF::Dot(U, eye);
+		Values[2][3] = -Vector3DF::Dot(F, eye);
+		Values[3][3] = 1.0f;
+		return *this;
+	}
+
+	Matrix44& Matrix44::SetPerspectiveFovRH(float ovY, float aspect, float zn, float zf)
+	{
+		float yScale = 1 / tanf(ovY / 2);
+		float xScale = yScale / aspect;
+
+		Values[0][0] = xScale;
+		Values[1][0] = 0;
+		Values[2][0] = 0;
+		Values[3][0] = 0;
+
+		Values[0][1] = 0;
+		Values[1][1] = yScale;
+		Values[2][1] = 0;
+		Values[3][1] = 0;
+
+		Values[0][2] = 0;
+		Values[1][2] = 0;
+		Values[2][2] = zf / (zn - zf);
+		Values[3][2] = -1;
+
+		Values[0][3] = 0;
+		Values[1][3] = 0;
+		Values[2][3] = zn * zf / (zn - zf);
+		Values[3][3] = 0;
+		return *this;
+	}
+
+	Matrix44& Matrix44::SetPerspectiveFovRH_OpenGL(float ovY, float aspect, float zn, float zf)
+	{
+		float yScale = 1 / tanf(ovY / 2);
+		float xScale = yScale / aspect;
+		float dz = zf - zn;
+
+		Values[0][0] = xScale;
+		Values[1][0] = 0;
+		Values[2][0] = 0;
+		Values[3][0] = 0;
+
+		Values[0][1] = 0;
+		Values[1][1] = yScale;
+		Values[2][1] = 0;
+		Values[3][1] = 0;
+
+		Values[0][2] = 0;
+		Values[1][2] = 0;
+		Values[2][2] = -(zf + zn) / dz;
+		Values[3][2] = -1.0f;
+
+		Values[0][3] = 0;
+		Values[1][3] = 0;
+		Values[2][3] = -2.0f * zn * zf / dz;
+		Values[3][3] = 0.0f;
+
+		return *this;
+	}
+
+	Matrix44& Matrix44::SetPerspectiveFovLH(float ovY, float aspect, float zn, float zf)
+	{
+		float yScale = 1 / tanf(ovY / 2);
+		float xScale = yScale / aspect;
+
+		Values[0][0] = xScale;
+		Values[1][0] = 0;
+		Values[2][0] = 0;
+		Values[3][0] = 0;
+
+		Values[0][1] = 0;
+		Values[1][1] = yScale;
+		Values[2][1] = 0;
+		Values[3][1] = 0;
+
+		Values[0][2] = 0;
+		Values[1][2] = 0;
+		Values[2][2] = zf / (zf - zn);
+		Values[3][2] = 1;
+
+		Values[0][3] = 0;
+		Values[1][3] = 0;
+		Values[2][3] = -zn * zf / (zf - zn);
+		Values[3][3] = 0;
+		return *this;
+	}
+
+	Matrix44& Matrix44::SetOrthographicRH(float width, float height, float zn, float zf)
+	{
+		Values[0][0] = 2 / width;
+		Values[1][0] = 0;
+		Values[2][0] = 0;
+		Values[3][0] = 0;
+
+		Values[0][1] = 0;
+		Values[1][1] = 2 / height;
+		Values[2][1] = 0;
+		Values[3][1] = 0;
+
+		Values[0][2] = 0;
+		Values[1][2] = 0;
+		Values[2][2] = 1 / (zn - zf);
+		Values[3][2] = 0;
+
+		Values[0][3] = 0;
+		Values[1][3] = 0;
+		Values[2][3] = zn / (zn - zf);
+		Values[3][3] = 1;
+		return *this;
+	}
+
+	Matrix44& Matrix44::SetOrthographicLH(float width, float height, float zn, float zf)
+	{
+		Values[0][0] = 2 / width;
+		Values[1][0] = 0;
+		Values[2][0] = 0;
+		Values[3][0] = 0;
+
+		Values[0][1] = 0;
+		Values[1][1] = 2 / height;
+		Values[2][1] = 0;
+		Values[3][1] = 0;
+
+		Values[0][2] = 0;
+		Values[1][2] = 0;
+		Values[2][2] = 1 / (zf - zn);
+		Values[3][2] = 0;
+
+		Values[0][3] = 0;
+		Values[1][3] = 0;
+		Values[2][3] = zn / (zn - zf);
+		Values[3][3] = 1;
+		return *this;
+	}
+
 	Vector3DF Matrix44::Transform3D(const Vector3DF& in) const
 	{
 		float values[4];

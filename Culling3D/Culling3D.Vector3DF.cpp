@@ -93,4 +93,30 @@ namespace Culling3D
 		Z /= o;
 		return *this;
 	}
+
+	float Vector3DF::Dot(const Vector3DF& v1, const Vector3DF& v2)
+	{
+		return v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z;
+	}
+
+	Vector3DF Vector3DF::Cross(const Vector3DF& v1, const Vector3DF& v2)
+	{
+		Vector3DF o;
+
+		float x = v1.Y * v2.Z - v1.Z * v2.Y;
+		float y = v1.Z * v2.X - v1.X * v2.Z;
+		float z = v1.X * v2.Y - v1.Y * v2.X;
+		o.X = x;
+		o.Y = y;
+		o.Z = z;
+		return o;
+	}
+
+	float Vector3DF::Distance(const Vector3DF& v1, const Vector3DF& v2)
+	{
+		float dx = v1.X - v2.X;
+		float dy = v1.Y - v2.Y;
+		float dz = v1.Z - v2.Z;
+		return sqrt(dx * dx + dy * dy + dz * dz);
+	}
 }

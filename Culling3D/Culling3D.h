@@ -153,6 +153,67 @@ namespace Culling3D
 		Vector3DF& operator *= (const float& o);
 
 		Vector3DF& operator /= (const float& o);
+
+		/**
+		@brief	このベクトルの長さを取得する。
+		*/
+		float GetLength() const
+		{
+			return sqrt(GetSquaredLength());
+		}
+
+		/**
+		@brief	このベクトルの長さの二乗を取得する。
+		*/
+		float GetSquaredLength() const
+		{
+			return X * X + Y * Y + Z * Z;
+		}
+
+		/**
+		@brief	このベクトルの長さを設定する。
+		*/
+		void SetLength(float value)
+		{
+			float length = GetLength();
+			(*this) *= (value / length);
+		}
+
+		/**
+		@brief	このベクトルの単位ベクトルを取得する。
+		*/
+		Vector3DF GetNormal()
+		{
+			float length = GetLength();
+			return Vector3DF(X / length, Y / length, Z / length);
+		}
+
+		/**
+		@brief	このベクトルの単位ベクトル化する。
+		*/
+		void Normalize()
+		{
+			float length = GetLength();
+			(*this) /= length;
+		}
+
+		/**
+		@brief	内積を取得する。
+		*/
+		static float Dot(const Vector3DF& v1, const Vector3DF& v2);
+
+		/**
+		@brief	外積を取得する。
+		@note
+		右手系の場合、右手の親指がv1、人差し指がv2としたとき、中指の方向を返す。<BR>
+		左手系の場合、左手の親指がv1、人差し指がv2としたとき、中指の方向を返す。<BR>
+		*/
+		static Vector3DF Cross(const Vector3DF& v1, const Vector3DF& v2);
+
+		/**
+		@brief	2点間の距離を取得する。
+		*/
+		static float Distance(const Vector3DF& v1, const Vector3DF& v2);
 	};
 	
 	struct Matrix44
@@ -162,6 +223,74 @@ namespace Culling3D
 		Matrix44();
 		Matrix44& SetInverted();
 		Vector3DF Transform3D(const Vector3DF& in) const;
+
+		/**
+		@brief	カメラ行列(右手系)を設定する。
+		@param	eye	カメラの位置
+		@param	at	カメラの注視点
+		@param	up	カメラの上方向
+		@return	このインスタンスへの参照
+		*/
+		Matrix44& SetLookAtRH(const Vector3DF& eye, const Vector3DF& at, const Vector3DF& up);
+
+		/**
+		@brief	カメラ行列(左手系)を設定する。
+		@param	eye	カメラの位置
+		@param	at	カメラの注視点
+		@param	up	カメラの上方向
+		@return	このインスタンスへの参照
+		*/
+		Matrix44& SetLookAtLH(const Vector3DF& eye, const Vector3DF& at, const Vector3DF& up);
+
+		/**
+		@brief	射影行列(右手系)を設定する。
+		@param	ovY	Y方向への視野角(ラジアン)
+		@param	aspect	画面のアスペクト比
+		@param	zn	最近距離
+		@param	zf	最遠距離
+		@return	このインスタンスへの参照
+		*/
+		Matrix44& SetPerspectiveFovRH(float ovY, float aspect, float zn, float zf);
+
+		/**
+		@brief	OpenGL用射影行列(右手系)を設定する。
+		@param	ovY	Y方向への視野角(ラジアン)
+		@param	aspect	画面のアスペクト比
+		@param	zn	最近距離
+		@param	zf	最遠距離
+		@return	このインスタンスへの参照
+		*/
+		Matrix44& SetPerspectiveFovRH_OpenGL(float ovY, float aspect, float zn, float zf);
+
+		/**
+		@brief	射影行列(左手系)を設定する。
+		@param	ovY	Y方向への視野角(ラジアン)
+		@param	aspect	画面のアスペクト比
+		@param	zn	最近距離
+		@param	zf	最遠距離
+		@return	このインスタンスへの参照
+		*/
+		Matrix44& SetPerspectiveFovLH(float ovY, float aspect, float zn, float zf);
+
+		/**
+		@brief	正射影行列(右手系)を設定する。
+		@param	width	横幅
+		@param	height	縦幅
+		@param	zn	最近距離
+		@param	zf	最遠距離
+		@return	このインスタンスへの参照
+		*/
+		Matrix44& SetOrthographicRH(float width, float height, float zn, float zf);
+
+		/**
+		@brief	正射影行列(左手系)を設定する。
+		@param	width	横幅
+		@param	height	縦幅
+		@param	zn	最近距離
+		@param	zf	最遠距離
+		@return	このインスタンスへの参照
+		*/
+		Matrix44& SetOrthographicLH(float width, float height, float zn, float zf);
 	};
 
 	class IReference
