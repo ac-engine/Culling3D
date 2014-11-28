@@ -15,11 +15,18 @@ int main()
 
 	world->AddObject(o0);
 
-	o0->SetPosition(Culling3D::Vector3DF(1, 1, 50));
+	o0->SetPosition(Culling3D::Vector3DF(1, 1, -40));
 	
 	o0->SetRadius(10.0f);
 
+	Culling3D::Matrix44 cameraMat, projMat;
 
+	cameraMat.SetLookAtRH(Culling3D::Vector3DF(0, 0, 1), Culling3D::Vector3DF(0, 0, 0), Culling3D::Vector3DF(0, 1, 0));
+	projMat.SetPerspectiveFovRH(20.0f / 180.0f * 3.14f, 4.0f / 3.0f, 1.0f, 100.0f);
+
+	Culling3D::Matrix44 mat = projMat * cameraMat;
+
+	world->Culling(mat, false);
 
 	Culling3D::SafeRelease(o0);
 

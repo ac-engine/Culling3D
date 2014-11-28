@@ -297,4 +297,35 @@ namespace Culling3D
 		return o;
 	}
 
+	Matrix44 Matrix44::operator * (const Matrix44& right) const
+	{
+		Matrix44 o_;
+		Mul(o_, *this, right);
+		return o_;
+	}
+
+	Vector3DF Matrix44::operator * (const Vector3DF& right) const
+	{
+		return Transform3D(right);
+	}
+
+	Matrix44& Matrix44::Mul(Matrix44& o, const Matrix44& in1, const Matrix44& in2)
+	{
+		Matrix44 _in1 = in1;
+		Matrix44 _in2 = in2;
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				float v = 0.0f;
+				for (int k = 0; k < 4; k++)
+				{
+					v += _in1.Values[i][k] * _in2.Values[k][j];
+				}
+				o.Values[i][j] = v;
+			}
+		}
+		return o;
+	}
 }

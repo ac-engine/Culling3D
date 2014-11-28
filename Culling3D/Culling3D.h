@@ -291,6 +291,19 @@ namespace Culling3D
 		@return	このインスタンスへの参照
 		*/
 		Matrix44& SetOrthographicLH(float width, float height, float zn, float zf);
+
+		Matrix44 operator * (const Matrix44& right) const;
+
+		Vector3DF operator*(const Vector3DF& right) const;
+
+		/**
+		@brief	乗算を行う。
+		@param	o	出力先
+		@param	in1	行列1
+		@param	in2	行列2
+		@return	出力先の参照
+		*/
+		static Matrix44& Mul(Matrix44& o, const Matrix44& in1, const Matrix44& in2);
 	};
 
 	class IReference
