@@ -195,6 +195,8 @@ namespace Culling3D
 		virtual void Culling(const Matrix44& cameraProjMat, bool isOpenGL) = 0;
 		virtual int32_t GetObjectCount() = 0;
 		virtual Object* GetObject(int32_t index) = 0;
+
+		static World* Create(float xSize, float ySize, float zSize, int32_t layerCount);
 	};
 
 	class Object
@@ -207,5 +209,8 @@ namespace Culling3D
 
 		virtual void* GetUserData() = 0;
 		virtual void SetUserData(void* data) = 0;
+
+
+		static Object* Create();
 	};
 }

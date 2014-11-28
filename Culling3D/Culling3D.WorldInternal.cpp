@@ -4,6 +4,11 @@
 
 namespace Culling3D
 {
+	World* World::Create(float xSize, float ySize, float zSize, int32_t layerCount)
+	{
+		return new WorldInternal(xSize, ySize, zSize, layerCount);
+	}
+
 	WorldInternal::WorldInternal(float xSize, float ySize, float zSize, int32_t layerCount)
 	{
 		this->xSize = xSize;

@@ -4,6 +4,11 @@
 
 namespace Culling3D
 {
+	Object* Object::Create()
+	{
+		return new ObjectInternal();
+	}
+
 	ObjectInternal::ObjectInternal()
 		: userData(NULL)
 		, world(NULL)
