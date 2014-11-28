@@ -65,6 +65,53 @@ namespace Culling3D
 		return t;
 	}
 
+	template <class T>
+	void SafeAddRef(T& t)
+	{
+		if (t != NULL)
+		{
+			t->AddRef();
+		}
+	}
+
+	template <class T>
+	void SafeRelease(T& t)
+	{
+		if (t != NULL)
+		{
+			t->Release();
+			t = NULL;
+		}
+	}
+
+	template <class T>
+	void SafeSubstitute(T& target, T& value)
+	{
+		SafeAddRef(value);
+		SafeRelease(target);
+		target = value;
+	}
+
+	template <typename T>
+	inline void SafeDelete(T*& p)
+	{
+		if (p != NULL)
+		{
+			delete (p);
+			(p) = NULL;
+		}
+	}
+
+	template <typename T>
+	inline void SafeDeleteArray(T*& p)
+	{
+		if (p != NULL)
+		{
+			delete [](p);
+			(p) = NULL;
+		}
+	}
+
 	class World;
 	class Object;
 
@@ -76,6 +123,35 @@ namespace Culling3D
 
 		Vector3DF();
 		Vector3DF(float x, float y, float z);
+
+		bool operator == (const Vector3DF& o);
+		bool operator != (const Vector3DF& o);
+
+		Vector3DF operator-();
+
+		Vector3DF operator + (const Vector3DF& o) const;
+
+		Vector3DF operator - (const Vector3DF& o) const;
+
+		Vector3DF operator * (const Vector3DF& o) const;
+
+		Vector3DF operator / (const Vector3DF& o) const;
+
+		Vector3DF operator * (const float& o) const;
+
+		Vector3DF operator / (const float& o) const;
+
+		Vector3DF& operator += (const Vector3DF& o);
+
+		Vector3DF& operator -= (const Vector3DF& o);
+
+		Vector3DF& operator *= (const Vector3DF& o);
+
+		Vector3DF& operator /= (const Vector3DF& o);
+
+		Vector3DF& operator *= (const float& o);
+
+		Vector3DF& operator /= (const float& o);
 	};
 	
 	struct Matrix44
@@ -110,6 +186,7 @@ namespace Culling3D
 	};
 
 	class World
+		: public IReference
 	{
 	public:
 		virtual void AddObject(Object* o) = 0;
@@ -121,6 +198,7 @@ namespace Culling3D
 	};
 
 	class Object
+		: public IReference
 	{
 	public:
 		virtual Vector3DF GetPosition() = 0;

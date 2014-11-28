@@ -28,8 +28,8 @@ namespace Culling3D
 		if (world != NULL)
 		{
 			WorldInternal* w = (WorldInternal*) world;
-			w->RemoveObject(this);
-			w->AddObject(this);
+			w->RemoveObjectInternal(this);
+			w->AddObjectInternal(this);
 		}
 
 		currentStatus = nextStatus;
@@ -42,8 +42,8 @@ namespace Culling3D
 		if (world != NULL)
 		{
 			WorldInternal* w = (WorldInternal*) world;
-			w->RemoveObject(this);
-			w->AddObject(this);
+			w->RemoveObjectInternal(this);
+			w->AddObjectInternal(this);
 		}
 
 		currentStatus = nextStatus;

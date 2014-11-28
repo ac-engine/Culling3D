@@ -68,6 +68,7 @@
     <ClInclude Include="Culling3D.h" />
     <ClInclude Include="Culling3D.Layer.h" />
     <ClInclude Include="Culling3D.ObjectInternal.h" />
+    <ClInclude Include="Culling3D.ReferenceObject.h" />
     <ClInclude Include="Culling3D.WorldInternal.h" />
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +76,7 @@
     <ClCompile Include="Culling3D.Layer.cpp" />
     <ClCompile Include="Culling3D.Matrix44.cpp" />
     <ClCompile Include="Culling3D.ObjectInternal.cpp" />
+    <ClCompile Include="Culling3D.ReferenceObject.cpp" />
     <ClCompile Include="Culling3D.Vector3DF.cpp" />
     <ClCompile Include="Culling3D.WorldInternal.cpp" />
   </ItemGroup>

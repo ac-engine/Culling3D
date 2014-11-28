@@ -6,6 +6,7 @@
     <ClInclude Include="Culling3D.ObjectInternal.h" />
     <ClInclude Include="Culling3D.Layer.h" />
     <ClInclude Include="Culling3D.Grid.h" />
+    <ClInclude Include="Culling3D.ReferenceObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Culling3D.WorldInternal.cpp" />
@@ -14,5 +15,6 @@
     <ClCompile Include="Culling3D.Grid.cpp" />
     <ClCompile Include="Culling3D.Matrix44.cpp" />
     <ClCompile Include="Culling3D.Vector3DF.cpp" />
+    <ClCompile Include="Culling3D.ReferenceObject.cpp" />
   </ItemGroup>
 </Project>
