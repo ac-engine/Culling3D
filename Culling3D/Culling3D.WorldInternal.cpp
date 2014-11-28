@@ -72,11 +72,18 @@ namespace Culling3D
 
 		ObjectInternal* o_ = (ObjectInternal*) o;
 
-		int32_t gridInd = (int32_t)((o_->GetNextStatus().Radius * 2.0f) / gridSize);
+		if (o_->GetNextStatus().Radius == 0.0f)
+		{
+			((ObjectInternal*) o)->SetWorld(this);
+			outofLayers.AddObject(o);
+			return;
+		}
 
-		if (gridInd * gridSize < (o_->GetNextStatus().Radius * 2.0f)) gridInd++;
+		int32_t gridInd = (int32_t) (gridSize / (o_->GetNextStatus().Radius * 2.0f));
 
-		int32_t ind = 0;
+		if (gridInd * (o_->GetNextStatus().Radius * 2.0f) < gridSize) gridInd++;
+
+		int32_t ind = 1;
 		bool found = false;
 		for (size_t i = 0; i < layers.size(); i++)
 		{
@@ -92,6 +99,8 @@ namespace Culling3D
 					break;
 				}
 			}
+
+			ind *= 2;
 		}
 
 		if (!found)
@@ -107,11 +116,18 @@ namespace Culling3D
 
 		ObjectInternal* o_ = (ObjectInternal*) o;
 
-		int32_t gridInd = (int32_t) ((o_->GetCurrentStatus().Radius * 2.0f) / gridSize);
+		if (o_->GetCurrentStatus().Radius == 0.0f)
+		{
+			((ObjectInternal*) o)->SetWorld(NULL);
+			outofLayers.RemoveObject(o);
+			return;
+		}
 
-		if (gridInd * gridSize < (o_->GetCurrentStatus().Radius * 2.0f)) gridInd++;
+		int32_t gridInd = (int32_t) (gridSize / (o_->GetCurrentStatus().Radius * 2.0f));
 
-		int32_t ind = 0;
+		if (gridInd * (o_->GetCurrentStatus().Radius * 2.0f) < gridSize) gridInd++;
+
+		int32_t ind = 1;
 		bool found = false;
 		for (size_t i = 0; i < layers.size(); i++)
 		{
@@ -127,6 +143,8 @@ namespace Culling3D
 					break;
 				}
 			}
+
+			ind *= 2;
 		}
 
 		if (!found)
