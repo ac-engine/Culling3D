@@ -21,7 +21,7 @@ namespace Culling3D
 
 		layers.resize(this->layerCount);
 
-		for (size_t i = 0; layers.size(); i++)
+		for (size_t i = 0; i < layers.size(); i++)
 		{
 			float gridSize_ = this->gridSize / powf(2.0f, (float)i);
 
@@ -39,7 +39,7 @@ namespace Culling3D
 
 	WorldInternal::~WorldInternal()
 	{
-		for (size_t i = 0; layers.size(); i++)
+		for (size_t i = 0; i < layers.size(); i++)
 		{
 			delete layers[i];
 		}
