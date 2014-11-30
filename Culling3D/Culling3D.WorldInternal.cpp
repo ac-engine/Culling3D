@@ -132,7 +132,7 @@ namespace Culling3D
 
 		ObjectInternal* o_ = (ObjectInternal*) o;
 
-		if (o_->GetNextStatus().Type == OBJECT_SHAPE_TYPE_ALL)
+		if (o_->GetCurrentStatus().Type == OBJECT_SHAPE_TYPE_ALL)
 		{
 			outofLayers.RemoveObject(o);
 			o_->SetWorld(NULL);
