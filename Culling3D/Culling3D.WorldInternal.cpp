@@ -16,7 +16,7 @@ namespace Culling3D
 		this->zSize = zSize;
 
 		this->gridSize = Max(Max(this->xSize, this->ySize), this->zSize);
-
+		
 		this->layerCount = layerCount;
 
 		layers.resize(this->layerCount);
@@ -34,6 +34,8 @@ namespace Culling3D
 			if (zCount * gridSize_ < this->zSize) zCount++;
 
 			layers[i] = new Layer(xCount, yCount, zCount, xSize / 2.0f, ySize / 2.0f, zSize / 2.0f, gridSize_);
+			
+			this->minGridSize = gridSize_;
 		}
 	}
 
@@ -71,17 +73,23 @@ namespace Culling3D
 		assert(o != NULL);
 
 		ObjectInternal* o_ = (ObjectInternal*) o;
-
-		if (o_->GetNextStatus().Radius == 0.0f)
+		float radius = o_->GetNextStatus().CalcRadius();
+		if (o_->GetNextStatus().Type == OBJECT_SHAPE_TYPE_NONE || radius <= minGridSize)
 		{
-			((ObjectInternal*) o)->SetWorld(this);
-			outofLayers.AddObject(o);
+			if (layers[layers.size() - 1]->AddObject(o))
+			{
+			}
+			else
+			{
+				outofLayers.AddObject(o);
+			}
+			o_->SetWorld(this);
 			return;
 		}
 
-		int32_t gridInd = (int32_t) (gridSize / (o_->GetNextStatus().Radius * 2.0f));
+		int32_t gridInd = (int32_t) (gridSize / (radius * 2.0f));
 
-		if (gridInd * (o_->GetNextStatus().Radius * 2.0f) < gridSize) gridInd++;
+		if (gridInd * (radius) < gridSize) gridInd++;
 
 		int32_t ind = 1;
 		bool found = false;
@@ -115,17 +123,23 @@ namespace Culling3D
 		assert(o != NULL);
 
 		ObjectInternal* o_ = (ObjectInternal*) o;
-
-		if (o_->GetCurrentStatus().Radius == 0.0f)
+		float radius = o_->GetCurrentStatus().CalcRadius();
+		if (o_->GetCurrentStatus().Type == OBJECT_SHAPE_TYPE_NONE || radius <= minGridSize)
 		{
-			((ObjectInternal*) o)->SetWorld(NULL);
-			outofLayers.RemoveObject(o);
+			if (layers[layers.size() - 1]->RemoveObject(o))
+			{
+			}
+			else
+			{
+				outofLayers.RemoveObject(o);
+			}
+			o_->SetWorld(NULL);
 			return;
 		}
 
-		int32_t gridInd = (int32_t) (gridSize / (o_->GetCurrentStatus().Radius * 2.0f));
+		int32_t gridInd = (int32_t) (gridSize / (radius * 2.0f));
 
-		if (gridInd * (o_->GetCurrentStatus().Radius * 2.0f) < gridSize) gridInd++;
+		if (gridInd * (radius * 2.0f) < gridSize) gridInd++;
 
 		int32_t ind = 1;
 		bool found = false;

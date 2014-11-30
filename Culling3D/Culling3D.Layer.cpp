@@ -28,9 +28,9 @@ namespace Culling3D
 
 		ObjectInternal* o_ = (ObjectInternal*) o;
 
-		float x = o_->GetCurrentStatus().Position.X + offsetX;
-		float y = o_->GetCurrentStatus().Position.Y + offsetY;
-		float z = o_->GetCurrentStatus().Position.Z + offsetZ;
+		float x = o_->GetNextStatus().Position.X + offsetX;
+		float y = o_->GetNextStatus().Position.Y + offsetY;
+		float z = o_->GetNextStatus().Position.Z + offsetZ;
 
 		int32_t xind = (int32_t)(x / gridSize);
 		int32_t yind = (int32_t)(y / gridSize);

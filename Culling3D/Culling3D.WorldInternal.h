@@ -21,6 +21,7 @@ namespace Culling3D
 		float zSize;
 
 		float	gridSize;
+		float	minGridSize;
 		int32_t	layerCount;
 
 		std::vector<Layer*>	layers;

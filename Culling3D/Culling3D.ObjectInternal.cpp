@@ -16,9 +16,31 @@ namespace Culling3D
 	{
 		currentStatus.Position = Vector3DF();
 		currentStatus.Radius = 0.0f;
+		currentStatus.Type = OBJECT_SHAPE_TYPE_NONE;
+		currentStatus.CuboidSize = Vector3DF();
 
 		nextStatus.Position = Vector3DF();
 		nextStatus.Radius = 0.0f;
+		nextStatus.Type = OBJECT_SHAPE_TYPE_NONE;
+		nextStatus.CuboidSize = Vector3DF();
+	}
+
+	ObjectInternal::~ObjectInternal()
+	{
+	}
+
+	void ObjectInternal::SetShapeType(eObjectShapeType type)
+	{
+		nextStatus.Type = type;
+
+		if (world != NULL)
+		{
+			WorldInternal* w = (WorldInternal*) world;
+			w->RemoveObjectInternal(this);
+			w->AddObjectInternal(this);
+		}
+
+		currentStatus = nextStatus;
 	}
 
 	Vector3DF ObjectInternal::GetPosition()
@@ -43,6 +65,20 @@ namespace Culling3D
 	void ObjectInternal::SetRadius(float radius)
 	{
 		nextStatus.Radius = radius;
+
+		if (world != NULL)
+		{
+			WorldInternal* w = (WorldInternal*) world;
+			w->RemoveObjectInternal(this);
+			w->AddObjectInternal(this);
+		}
+
+		currentStatus = nextStatus;
+	}
+
+	void ObjectInternal::SetCuboidSize(Vector3DF size)
+	{
+		nextStatus.CuboidSize = size;
 
 		if (world != NULL)
 		{

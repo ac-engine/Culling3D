@@ -17,7 +17,7 @@ int main()
 	for (auto i = 0; i < 100; i++)
 	{
 		Culling3D::Object* o = Culling3D::Object::Create();
-
+		o->SetShapeType(Culling3D::OBJECT_SHAPE_TYPE_SPHERE);
 		world->AddObject(o);
 		o->SetPosition(Culling3D::Vector3DF(1, 1, -40));
 		o->SetRadius(50.0f);

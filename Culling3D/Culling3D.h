@@ -306,6 +306,15 @@ namespace Culling3D
 		static Matrix44& Mul(Matrix44& o, const Matrix44& in1, const Matrix44& in2);
 	};
 
+	enum eObjectShapeType
+	{
+		OBJECT_SHAPE_TYPE_NONE,
+		OBJECT_SHAPE_TYPE_SPHERE,
+		OBJECT_SHAPE_TYPE_CUBOID,
+
+	};
+
+
 	class IReference
 	{
 	public:
@@ -346,13 +355,15 @@ namespace Culling3D
 		: public IReference
 	{
 	public:
+		virtual void SetShapeType(eObjectShapeType type) = 0;
+
 		virtual Vector3DF GetPosition() = 0;
 		virtual void SetPosition(Vector3DF pos) = 0;
 		virtual void SetRadius(float radius) = 0;
+		virtual void SetCuboidSize(Vector3DF size) = 0;
 
 		virtual void* GetUserData() = 0;
 		virtual void SetUserData(void* data) = 0;
-
 
 		static Object* Create();
 	};
