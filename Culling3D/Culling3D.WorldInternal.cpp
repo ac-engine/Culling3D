@@ -73,6 +73,14 @@ namespace Culling3D
 		assert(o != NULL);
 
 		ObjectInternal* o_ = (ObjectInternal*) o;
+
+		if (o_->GetNextStatus().Type == OBJECT_SHAPE_TYPE_ALL)
+		{
+			outofLayers.AddObject(o);
+			o_->SetWorld(this);
+			return;
+		}
+
 		float radius = o_->GetNextStatus().CalcRadius();
 		if (o_->GetNextStatus().Type == OBJECT_SHAPE_TYPE_NONE || radius <= minGridSize)
 		{
@@ -123,6 +131,14 @@ namespace Culling3D
 		assert(o != NULL);
 
 		ObjectInternal* o_ = (ObjectInternal*) o;
+
+		if (o_->GetNextStatus().Type == OBJECT_SHAPE_TYPE_ALL)
+		{
+			outofLayers.RemoveObject(o);
+			o_->SetWorld(NULL);
+			return;
+		}
+
 		float radius = o_->GetCurrentStatus().CalcRadius();
 		if (o_->GetCurrentStatus().Type == OBJECT_SHAPE_TYPE_NONE || radius <= minGridSize)
 		{

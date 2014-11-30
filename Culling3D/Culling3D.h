@@ -1,5 +1,6 @@
 
-#pragma once
+#ifndef	__CULLING3D_CULLING3D_H__
+#define	__CULLING3D_CULLING3D_H__
 
 #include <stdio.h>
 #include <math.h>
@@ -311,7 +312,7 @@ namespace Culling3D
 		OBJECT_SHAPE_TYPE_NONE,
 		OBJECT_SHAPE_TYPE_SPHERE,
 		OBJECT_SHAPE_TYPE_CUBOID,
-
+		OBJECT_SHAPE_TYPE_ALL,
 	};
 
 
@@ -368,3 +369,5 @@ namespace Culling3D
 		static Object* Create();
 	};
 }
+
+#endif
