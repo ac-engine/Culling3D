@@ -158,6 +158,9 @@ namespace Culling3D
 	{
 		objs.clear();
 		
+		Matrix44 cameraProjMatInv = cameraProjMat;
+		cameraProjMatInv.SetInverted();
+
 		float maxx = 1.0f;
 		float minx = -1.0f;
 
@@ -168,9 +171,26 @@ namespace Culling3D
 		float minz = 0.0f;
 		if (isOpenGL) minz = -1.0f;
 
+		Vector3DF eyebox[8];
+
+		eyebox[0 + 0] = Vector3DF(minx, miny, maxz);
+		eyebox[1 + 0] = Vector3DF(maxx, miny, maxz);
+		eyebox[2 + 0] = Vector3DF(minx, maxy, maxz);
+		eyebox[3 + 0] = Vector3DF(maxx, maxy, maxz);
+
+		eyebox[0 + 4] = Vector3DF(minx, miny, minz);
+		eyebox[1 + 4] = Vector3DF(maxx, miny, minz);
+		eyebox[2 + 4] = Vector3DF(minx, maxy, minz);
+		eyebox[3 + 4] = Vector3DF(maxx, maxy, minz);
+
+		for (int32_t i = 0; i < 8; i++)
+		{
+			eyebox[i] = cameraProjMatInv.Transform3D(eyebox[i]);
+		}
+
 		const int32_t xdiv = 2;
 		const int32_t ydiv = 2;
-		const int32_t zdiv = 2;
+		const int32_t zdiv = 3;
 
 		for (int32_t z = 0; z < zdiv; z++)
 		{
@@ -178,51 +198,51 @@ namespace Culling3D
 			{
 				for (int32_t x = 0; x < xdiv; x++)
 				{
+					Vector3DF eyebox_[8];
+
 					float xsize = 1.0f / (float) xdiv;
 					float ysize = 1.0f / (float) ydiv;
 					float zsize = 1.0f / (float) zdiv;
 
-					float maxx_ = (maxx - minx) * (xsize * (x + 1)) + minx;
-					float minx_ = (maxx - minx) * (xsize * (x + 0)) + minx;
-
-					float maxy_ = (maxy - miny) * (ysize * (y + 1)) + miny;
-					float miny_ = (maxy - miny) * (ysize * (y + 0)) + miny;
-
-					float maxz_ = (maxz - minz) * (zsize * (z + 1)) + minz;
-					float minz_ = (maxz - minz) * (zsize * (z + 0)) + minz;
-
-					Vector3DF eyebox[8];
-
-					eyebox[0 + 0] = Vector3DF(minx_, miny_, maxz);
-					eyebox[1 + 0] = Vector3DF(maxx_, miny_, maxz);
-					eyebox[2 + 0] = Vector3DF(minx_, maxy_, maxz);
-					eyebox[3 + 0] = Vector3DF(maxx_, maxy_, maxz);
-
-					eyebox[0 + 4] = Vector3DF(minx_, miny_, minz);
-					eyebox[1 + 4] = Vector3DF(maxx_, miny_, minz);
-					eyebox[2 + 4] = Vector3DF(minx_, maxy_, minz);
-					eyebox[3 + 4] = Vector3DF(maxx_, maxy_, minz);
-
-					Matrix44 cameraProjMatInv = cameraProjMat;
-					cameraProjMatInv.SetInverted();
-
-					for (int32_t i = 0; i < 8; i++)
+					for (int32_t e = 0; e < 8; e++)
 					{
-						eyebox[i] = cameraProjMatInv.Transform3D(eyebox[i]);
-					}
+						float x_, y_, z_;
+						if (e == 0){ x_ = xsize * x; y_ = ysize * y; z_ = zsize * z; }
+						if (e == 1){ x_ = xsize * (x + 1); y_ = ysize * y; z_ = zsize * z; }
+						if (e == 2){ x_ = xsize * x; y_ = ysize * (y + 1); z_ = zsize * z; }
+						if (e == 3){ x_ = xsize * (x + 1); y_ = ysize * (y + 1); z_ = zsize * z; }
+						if (e == 4){ x_ = xsize * x; y_ = ysize * y; z_ = zsize * (z + 1); }
+						if (e == 5){ x_ = xsize * (x + 1); y_ = ysize * y; z_ = zsize * (z + 1); }
+						if (e == 6){ x_ = xsize * x; y_ = ysize * (y + 1); z_ = zsize * (z + 1); }
+						if (e == 7){ x_ = xsize * (x + 1); y_ = ysize * (y + 1); z_ = zsize * (z + 1); }
 
-					Vector3DF max_(FLT_MIN, FLT_MIN, FLT_MIN);
+						Vector3DF yzMid[4];
+						yzMid[0] = eyebox[0] * x_ + eyebox[1] * (1.0f - x_);
+						yzMid[1] = eyebox[2] * x_ + eyebox[3] * (1.0f - x_);
+						yzMid[2] = eyebox[4] * x_ + eyebox[5] * (1.0f - x_);
+						yzMid[3] = eyebox[6] * x_ + eyebox[7] * (1.0f - x_);
+
+						Vector3DF zMid[2];
+						zMid[0] = yzMid[0] * y_ + yzMid[1] * (1.0f - y_);
+						zMid[1] = yzMid[2] * y_ + yzMid[3] * (1.0f - y_);
+				
+						eyebox_[e] = zMid[0] * z_ + zMid[1] * (1.0f - z_);
+					}
+					
+
+
+					Vector3DF max_(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 					Vector3DF min_(FLT_MAX, FLT_MAX, FLT_MAX);
 
 					for (int32_t i = 0; i < 8; i++)
 					{
-						if (eyebox[i].X > max_.X) max_.X = eyebox[i].X;
-						if (eyebox[i].Y > max_.Y) max_.Y = eyebox[i].Y;
-						if (eyebox[i].Z > max_.Z) max_.Z = eyebox[i].Z;
+						if (eyebox_[i].X > max_.X) max_.X = eyebox_[i].X;
+						if (eyebox_[i].Y > max_.Y) max_.Y = eyebox_[i].Y;
+						if (eyebox_[i].Z > max_.Z) max_.Z = eyebox_[i].Z;
 
-						if (eyebox[i].X < min_.X) min_.X = eyebox[i].X;
-						if (eyebox[i].Y < min_.Y) min_.Y = eyebox[i].Y;
-						if (eyebox[i].Z < min_.Z) min_.Z = eyebox[i].Z;
+						if (eyebox_[i].X < min_.X) min_.X = eyebox_[i].X;
+						if (eyebox_[i].Y < min_.Y) min_.Y = eyebox_[i].Y;
+						if (eyebox_[i].Z < min_.Z) min_.Z = eyebox_[i].Z;
 					}
 
 					/* 範囲内に含まれるグリッドを取得 */
@@ -230,11 +250,12 @@ namespace Culling3D
 					{
 						layers[i]->AddGrids(max_, min_, grids);
 					}
-
-					grids.push_back(&outofLayers);
 				}
 			}
 		}
+
+		/* 外領域追加 */
+		grids.push_back(&outofLayers);
 
 		/* グリッドからオブジェクト取得 */
 		for (size_t i = 0; i < grids.size(); i++)
@@ -251,5 +272,7 @@ namespace Culling3D
 		{
 			grids[i]->IsScanned = false;
 		}
+
+		grids.clear();
 	}
 }
