@@ -29,7 +29,6 @@ namespace Culling3D
 
 	private:
 		void*		userData;
-		Vector3DF	position;
 		World*		world;
 
 		Status	currentStatus;
