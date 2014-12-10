@@ -10,6 +10,17 @@ namespace Culling3D
 	const int32_t viewCullingYDiv = 2;
 	const int32_t viewCullingZDiv = 3;
 
+	bool IsInView(Vector3DF position, float radius, Vector3DF facePositions[6], Vector3DF faceDir[6])
+	{
+		for (int32_t i = 0; i < 6; i++)
+		{
+			Vector3DF diff = position - facePositions[i];
+			float distance = Vector3DF::Dot(diff, faceDir[i]);
+		
+			if (distance > radius) return false;
+		}
+	}
+
 	World* World::Create(float xSize, float ySize, float zSize, int32_t layerCount)
 	{
 		return new WorldInternal(xSize, ySize, zSize, layerCount);
@@ -224,6 +235,30 @@ namespace Culling3D
 			eyebox[i] = cameraProjMatInv.Transform3D(eyebox[i]);
 		}
 
+		// 0-right 1-left 2-top 3-bottom 4-front 5-back
+		Vector3DF facePositions[6];
+		facePositions[0] = eyebox[5];
+		facePositions[1] = eyebox[4];
+		facePositions[2] = eyebox[6];
+		facePositions[3] = eyebox[4];
+		facePositions[4] = eyebox[4];
+		facePositions[5] = eyebox[0];
+
+		Vector3DF faceDir[6];
+		faceDir[0] = Vector3DF::Cross(eyebox[1] - eyebox[5], eyebox[7]- eyebox[5]);
+		faceDir[1] = Vector3DF::Cross(eyebox[6] - eyebox[4], eyebox[0] - eyebox[4]);
+
+		faceDir[2] = Vector3DF::Cross(eyebox[7] - eyebox[6], eyebox[2] - eyebox[6]);
+		faceDir[3] = Vector3DF::Cross(eyebox[0] - eyebox[4], eyebox[5] - eyebox[4]);
+
+		faceDir[4] = Vector3DF::Cross(eyebox[5] - eyebox[4], eyebox[6] - eyebox[4]);
+		faceDir[5] = Vector3DF::Cross(eyebox[2] - eyebox[0], eyebox[1] - eyebox[5]);
+
+		for (int32_t i = 0; i < 6; i++)
+		{
+			faceDir[i].Normalize();
+		}
+
 		for (int32_t z = 0; z < viewCullingZDiv; z++)
 		{
 			for (int32_t y = 0; y < viewCullingYDiv; y++)
@@ -295,7 +330,14 @@ namespace Culling3D
 			for (size_t j = 0; j < grids[i]->GetObjects().size(); j++)
 			{
 				Object* o = grids[i]->GetObjects()[j];
-				objs.push_back(o);
+				ObjectInternal* o_ = (ObjectInternal*) o;
+
+				if (
+					o_->GetNextStatus().Type == OBJECT_SHAPE_TYPE_ALL ||
+					IsInView(o_->GetPosition(), o_->GetNextStatus().Radius, facePositions, faceDir))
+				{
+					objs.push_back(o);
+				}
 			}
 		}
 
