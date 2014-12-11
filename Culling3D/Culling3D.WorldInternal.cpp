@@ -247,7 +247,7 @@ namespace Culling3D
 		facePositions[5] = eyebox[0];
 
 		Vector3DF faceDir[6];
-		faceDir[0] = Vector3DF::Cross(eyebox[1] - eyebox[5], eyebox[7]- eyebox[5]);
+		faceDir[0] = Vector3DF::Cross(eyebox[1] - eyebox[5], eyebox[7] - eyebox[5]);
 		faceDir[1] = Vector3DF::Cross(eyebox[6] - eyebox[4], eyebox[0] - eyebox[4]);
 
 		faceDir[2] = Vector3DF::Cross(eyebox[7] - eyebox[6], eyebox[2] - eyebox[6]);
@@ -336,7 +336,7 @@ namespace Culling3D
 
 				if (
 					o_->GetNextStatus().Type == OBJECT_SHAPE_TYPE_ALL ||
-					IsInView(o_->GetPosition(), o_->GetNextStatus().Radius, facePositions, faceDir))
+					IsInView(o_->GetPosition(), o_->GetNextStatus().CalcRadius(), facePositions, faceDir))
 				{
 					objs.push_back(o);
 				}
