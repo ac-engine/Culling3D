@@ -19,6 +19,8 @@ namespace Culling3D
 		
 			if (distance > radius) return false;
 		}
+
+		return true;
 	}
 
 	World* World::Create(float xSize, float ySize, float zSize, int32_t layerCount)
