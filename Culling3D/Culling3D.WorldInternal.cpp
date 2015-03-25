@@ -372,9 +372,9 @@ namespace Culling3D
 		outofLayers.IsScanned = false;
 		allLayers.IsScanned = false;
 
-		for (std::set<Object*>::iterator it = containedObjects.begin(); it != containedObjects.end(); it++)
+		for (auto& it : containedObjects)
 		{
-			auto o = (ObjectInternal*) (*it);
+			auto o = (ObjectInternal*) (it);
 			o->ObjectIndex = -1;
 		}
 
@@ -385,9 +385,9 @@ namespace Culling3D
 		float zmin = FLT_MAX;
 		float zmax = -FLT_MAX;
 
-		for (std::set<Object*>::iterator it = containedObjects.begin(); it != containedObjects.end(); it++)
+		for (auto& it : containedObjects)
 		{
-			ObjectInternal* o_ = (ObjectInternal*) (*it);
+			ObjectInternal* o_ = (ObjectInternal*) it;
 			if (o_->GetNextStatus().Type == OBJECT_SHAPE_TYPE_ALL) continue;
 
 			if (xmin > o_->GetNextStatus().Position.X) xmin = o_->GetNextStatus().Position.X;
@@ -405,9 +405,9 @@ namespace Culling3D
 
 		WorldInternal(xlen, ylen, zlen, this->layerCount);
 
-		for (std::set<Object*>::iterator it = containedObjects.begin(); it != containedObjects.end(); it++)
+		for (auto& it: containedObjects)
 		{
-			ObjectInternal* o_ = (ObjectInternal*) (*it);
+			ObjectInternal* o_ = (ObjectInternal*) (it);
 			AddObjectInternal(o_);
 		}
 		return true;
