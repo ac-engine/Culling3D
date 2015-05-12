@@ -12,6 +12,14 @@ if (MSVC)
 	option(USE_MSVC_RUNTIME_LIBRARY_DLL "Use MSVC runtime library DLL" OFF)
 endif()
 
+# コンパイル設定
+if (MSVC)
+	# 特に何も
+else()
+	set(CMAKE_CXX_FLAGS "-std=c++11 -fPIC" ${CMAKE_CXX_FLAGS})
+endif()
+
+
 # ソースコード設定
 set(culling3d_src
 	Culling3D/Culling3D.Grid.cpp
