@@ -208,7 +208,9 @@ namespace Culling3D
 		objs.clear();
 	
 		
-		if (isfinite(cameraProjMat.Values[2][2]) != 0)
+		if (isfinite(cameraProjMat.Values[2][2]) != 0 &&
+			cameraProjMat.Values[0][0] != 0.0f &&
+			cameraProjMat.Values[1][1] != 0.0f)
 		{
 			Matrix44 cameraProjMatInv = cameraProjMat;
 			cameraProjMatInv.SetInverted();
