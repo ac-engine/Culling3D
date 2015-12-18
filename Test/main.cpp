@@ -14,13 +14,38 @@ int main()
 
 	std::vector<Culling3D::Object*> objs;
 
+	for (auto i = 0; i < 1; i++)
+	{
+		Culling3D::Object* o = Culling3D::Object::Create();
+		world->AddObject(o);
+		o->SetPosition(Culling3D::Vector3DF(50, 10, 40));
+		o->ChangeIntoSphere(10.0f);
+		objs.push_back(o);
+	}
+
+	world->CastRay(Culling3D::Vector3DF(400, 10, 40), Culling3D::Vector3DF(500, 10, 40));
+
+	for (auto i = 0; i < objs.size(); i++)
+	{
+		objs[i]->Release();
+	}
+	objs.clear();
+
+	Culling3D::SafeRelease(world);
+
+	return 0;
+
+	/*
+	Culling3D::World* world = Culling3D::World::Create(100, 20, 100, 4);
+
+	std::vector<Culling3D::Object*> objs;
+
 	for (auto i = 0; i < 100; i++)
 	{
 		Culling3D::Object* o = Culling3D::Object::Create();
-		o->SetShapeType(Culling3D::OBJECT_SHAPE_TYPE_SPHERE);
 		world->AddObject(o);
 		o->SetPosition(Culling3D::Vector3DF(1, 1, -40));
-		o->SetRadius(50.0f);
+		o->ChangeIntoSphere(50.0f);
 		objs.push_back(o);
 	}
 
@@ -42,4 +67,5 @@ int main()
 	Culling3D::SafeRelease(world);
 
 	return 0;
+	*/
 }
