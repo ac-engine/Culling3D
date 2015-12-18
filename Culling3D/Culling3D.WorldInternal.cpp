@@ -255,10 +255,10 @@ namespace Culling3D
 
 					auto from2pos = pos - from;
 					auto from2nearLen = Vector3DF::Dot(from2pos, ray_dir);
-					auto pos2ray = ray_dir - ray_dir * from2nearLen;
+					auto pos2ray = from2pos - ray_dir * from2nearLen;
 
 					if (pos2ray.GetLength() > radius) continue;
-					if (from2nearLen > 0 || from2nearLen > ray_len) continue;
+					if (from2nearLen < 0 || from2nearLen > ray_len) continue;
 				}
 
 				if (o_->GetNextStatus().Type == OBJECT_SHAPE_TYPE_SPHERE)
@@ -326,7 +326,7 @@ namespace Culling3D
 					}
 
 					// Œð·‚µ‚Ä‚¢‚é
-					if (t >= 0 && t <= ray_len)
+					if (0 <= t  && t <= ray_len)
 					{
 						objs.push_back(o);
 						continue;

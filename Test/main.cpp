@@ -19,11 +19,11 @@ int main()
 		Culling3D::Object* o = Culling3D::Object::Create();
 		world->AddObject(o);
 		o->SetPosition(Culling3D::Vector3DF(50, 10, 40));
-		o->ChangeIntoSphere(10.0f);
+		o->ChangeIntoCuboid(Culling3D::Vector3DF(10,10,10));
 		objs.push_back(o);
 	}
 
-	world->CastRay(Culling3D::Vector3DF(400, 10, 40), Culling3D::Vector3DF(500, 10, 40));
+	world->CastRay(Culling3D::Vector3DF(50, 10, 40), Culling3D::Vector3DF(500, 10, 40));
 
 	for (auto i = 0; i < objs.size(); i++)
 	{
