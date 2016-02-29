@@ -46,6 +46,21 @@ namespace Culling3D
 		currentStatus = nextStatus;
 	}
 
+	void ObjectInternal::ChangeIntoAll()
+	{
+		nextStatus.Type = OBJECT_SHAPE_TYPE_ALL;
+		nextStatus.CalcRadius();
+
+		if (world != NULL)
+		{
+			WorldInternal* w = (WorldInternal*) world;
+			w->RemoveObjectInternal(this);
+			w->AddObjectInternal(this);
+		}
+
+		currentStatus = nextStatus;
+	}
+
 	void ObjectInternal::ChangeIntoSphere(float radius)
 	{
 		nextStatus.Data.Sphere.Radius = radius;

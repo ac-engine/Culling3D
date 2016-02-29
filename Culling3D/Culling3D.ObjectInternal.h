@@ -61,6 +61,8 @@ namespace Culling3D
 		Vector3DF GetPosition() override;
 		void SetPosition(Vector3DF pos) override;
 
+		void ChangeIntoAll() override;
+
 		void ChangeIntoSphere(float radius) override;
 
 		void ChangeIntoCuboid(Vector3DF size) override;

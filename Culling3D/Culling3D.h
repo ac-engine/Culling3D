@@ -353,6 +353,7 @@ namespace Culling3D
 	public:
 		virtual Vector3DF GetPosition() = 0;
 		virtual void SetPosition(Vector3DF pos) = 0;
+		virtual void ChangeIntoAll() = 0;
 		virtual void ChangeIntoSphere(float radius) = 0;
 		virtual void ChangeIntoCuboid(Vector3DF size) = 0;
 
