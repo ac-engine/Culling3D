@@ -58,15 +58,15 @@ namespace Culling3D
 		ObjectInternal();
 		virtual ~ObjectInternal();
 
-		Vector3DF GetPosition();
-		void SetPosition(Vector3DF pos);
+		Vector3DF GetPosition() override;
+		void SetPosition(Vector3DF pos) override;
 
-		void ChangeIntoSphere(float radius);
+		void ChangeIntoSphere(float radius) override;
 
-		void ChangeIntoCuboid(Vector3DF size);
+		void ChangeIntoCuboid(Vector3DF size) override;
 
-		void* GetUserData();
-		void SetUserData(void* userData);
+		void* GetUserData() override;
+		void SetUserData(void* userData) override;
 
 		void SetWorld(World* world);
 

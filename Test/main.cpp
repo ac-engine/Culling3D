@@ -21,6 +21,7 @@ int main()
 		o->SetPosition(Culling3D::Vector3DF(50, 10, 40));
 		o->ChangeIntoCuboid(Culling3D::Vector3DF(10,10,10));
 		objs.push_back(o);
+		o->SetUserData(nullptr);
 	}
 
 	world->CastRay(Culling3D::Vector3DF(50, 10, 40), Culling3D::Vector3DF(500, 10, 40));
